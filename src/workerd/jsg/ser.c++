@@ -99,6 +99,14 @@ v8::Maybe<bool> Serializer::IsHostObject(v8::Isolate* isolate, v8::Local<v8::Obj
   KJ_ASSERT(!treatClassInstancesAsPlainObjects);
   KJ_ASSERT(!prototypeOfObject.IsEmpty());
 
+  // This is a hacky fix to handle native errors correctly when passing between pyodide and workerd.
+  // We need to check for native errors since it would throw DataCloneError due to the object not having
+  // internal fields.
+  // Related v8 change: https://github.com/v8/v8/commit/e3df60f3f5abe85f819ff2fad6a41d0709e30a61
+  if (object->IsNativeError()) {
+    return v8::Just(false);
+  }
+
   // If the object's prototype is Object.prototype, then it is a plain object, which we'll allow
   // to be serialized normally. Otherwise, it is a class instance, which we should treat as a host
   // object. Inside `WriteHostObject()` we will throw DataCloneError due to the object not having
