@@ -3,15 +3,13 @@
 # programming language.
 import datetime
 import functools
-import asyncio
 import http.client
-import json
 import inspect
+import json
 from collections.abc import Generator, Iterable, MutableMapping
 from contextlib import ExitStack, contextmanager
 from enum import StrEnum
 from http import HTTPMethod, HTTPStatus
-from operator import call
 from types import LambdaType
 from typing import Any, TypedDict, Unpack
 
@@ -941,10 +939,12 @@ class _WorkflowStepWrapper:
         if callback is None:
             # Return a decorator that will execute the function when called
             def decorator(func):
-                @functools.wraps(callback)
+                @functools.wraps(func)
                 async def wrapper(*args, **kwargs):
                     return self._do_call(name, config, func)
+
                 return wrapper
+
             return decorator
 
         # Original callback-based implementation
@@ -971,6 +971,7 @@ class _WorkflowStepWrapper:
 
         return python_from_rpc(result)
 
+
 def _wrap_subclass(cls):
     # Override the class __init__ so that we can wrap the `env` in the constructor.
     original_init = cls.__init__
@@ -983,6 +984,7 @@ def _wrap_subclass(cls):
 
     cls.__init__ = wrapped_init
 
+
 def _wrap_workflow_step(cls):
     run_fn = getattr(cls, "on_run", None)
     if run_fn is None:
@@ -993,7 +995,7 @@ def _wrap_workflow_step(cls):
         # Not a workflow subclass, so don't wrap `on_run`.
         return
 
-    async def wrapped_run(self, event = None, step = None, /, *args, **kwargs):
+    async def wrapped_run(self, event=None, step=None, /, *args, **kwargs):
         if event is not None:
             event = python_from_rpc(event)
         if step is not None:
