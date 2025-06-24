@@ -2,7 +2,6 @@
 
 #include <workerd/io/compatibility-date.capnp.h>
 #include <workerd/jsg/jsg.h>
-#include <workerd/util/uuid.h>
 
 #include <kj/hash.h>
 #include <kj/map.h>

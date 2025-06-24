@@ -10,10 +10,10 @@
 #include <workerd/io/compatibility-date.capnp.h>
 #include <workerd/io/io-own.h>
 #include <workerd/io/worker-interface.capnp.h>
+#include <workerd/jsg/function.h>
 #include <workerd/jsg/jsg.h>
 #include <workerd/util/canceler.h>
 
-#include <kj/function.h>
 #include <kj/map.h>
 
 namespace workerd::api {

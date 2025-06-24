@@ -5,7 +5,7 @@
 #pragma once
 
 #include "common.h"
-#include <kj/function.h>
+#include <workerd/jsg/function.h>
 
 namespace workerd::api {
 

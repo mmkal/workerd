@@ -190,7 +190,7 @@ bool Headers::hasLowerCase(kj::StringPtr name) {
     KJ_DREQUIRE(!('A' <= c && c <= 'Z'));
   }
 #endif
-  return headers.find(name) != headers.end();
+  return headers.contains(name);
 }
 
 kj::Array<Headers::DisplayedHeader> Headers::getDisplayedHeaders(jsg::Lock& js) {
